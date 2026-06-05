@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nubecita Kids - Ropita para Bebés y Niños</title>
+    
+    <!-- Google Fonts: Quicksand para un toque tierno y redondeado -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS para el estilizado moderno -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Alpine.js para la interactividad reactiva -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Lucide Icons para hermosos iconos modernos -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Quicksand', 'sans-serif'],
+                    },
+                    colors: {
+                        sand: {
+                            50: '#FAF8F5',   // Fondo súper suave crema
+                            100: '#F4EFE6',  // Lino claro / Tarjetas
+                            200: '#EAE1D4',  // Bordes suaves / Gris beige
+                            300: '#D8CBB5',  // Acentuado ligero
+                            400: '#C2AF94',  // Botón secundario / Arena
+                            500: '#A89275',  // Color de marca intermedio
+                            600: '#8E775B',  // Color de marca destacado / Avena tostada
+                            700: '#755E45',  // Texto intermedio
+                            800: '#5C4834',  // Café espresso / Títulos
+                            900: '#3D2F22'   // Chocolate profundo
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-slow': 'float 9s ease-in-out infinite',
+                        'pulse-gentle': 'pulse-gentle 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-12px)' },
+                        },
+                        'pulse-gentle': {
+                            '0%, 100%': { opacity: 1, transform: 'scale(1)' },
+                            '50%': { opacity: 0.92, transform: 'scale(1.015)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF8F5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #EAE1D4;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C2AF94;
+        }
+        .glass {
+            background: rgba(250, 248, 245, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+
+<body class="bg-[#FAF8F5] text-sand-800 font-sans overflow-x-hidden" x-data="nubecitaApp()">
+
+    <div class="bg-gradient-to-r from-sand-100 via-[#FAF8F5] to-sand-200 py-2.5 text-center text-xs md:text-sm font-semibold text-sand-700 relative z-50 shadow-sm border-b border-sand-200/40">
+        ✨ ¡Envíos gratis en compras superiores a $U 1500! ☁️ 3 y 6 Cuotas Sin Interés 🧸
+    </div>
+
+    <header class="sticky top-0 z-40 w-full transition-all duration-300 glass border-b border-sand-200/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            
+            <!-- Logo Nubecita Kids -->
+            <a href="#" class="flex items-center space-x-2.5 group">
+                <div class="relative flex items-center justify-center">
+                    <div class="absolute -inset-1.5 bg-gradient-to-r from-sand-300 to-sand-400 rounded-full blur opacity-25 group-hover:opacity-45 transition duration-500"></div>
+                    <div class="relative bg-white p-2.5 rounded-full shadow-sm border border-sand-200/50">
+                        <svg class="w-6.5 h-6.5 text-sand-500" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19.36 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.64-4.96z"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-2xl font-bold tracking-tight bg-gradient-to-r from-sand-600 to-sand-800 bg-clip-text text-transparent">Nubecita</span>
+                    <span class="text-[10px] uppercase tracking-widest text-sand-400 font-bold -mt-1">K i d s</span>
+                </div>
+            </a>
+
+            <!-- Navegación de Categorías rápidas -->
+            <nav class="hidden md:flex items-center space-x-8 font-medium">
+                <a href="#catalogo" @click="activeCategory = 'todos'" class="text-sand-600 hover:text-sand-900 transition-colors">Ver Todo</a>
+                <a href="#catalogo" @click="activeCategory = 'bebes'" class="text-sand-600 hover:text-sand-900 transition-colors">Bebés (0-24m)</a>
+                <a href="#catalogo" @click="activeCategory = 'ninos'" class="text-sand-600 hover:text-sand-900 transition-colors">Niños (2-6 años)</a>
+                <a href="#probador" class="bg-sand-100 hover:bg-sand-200 text-sand-800 px-3.5 py-1.5 rounded-full transition-all text-sm flex items-center gap-1.5 border border-sand-200/60 font-semibold">
+                    <i data-lucide="sparkles" class="w-4 h-4 text-sand-500 animate-pulse"></i> Probador Mágico
+                </a>
+                <a href="#talles" class="text-sand-600 hover:text-sand-900 transition-colors text-sm">Buscador de Talles</a>
+            </nav>
+
+            <!-- Acciones de Usuario (Carrito, Buscar) -->
+            <div class="flex items-center space-x-4">
+                
+                <!-- Buscador de productos beige minimalista -->
+                <div class="relative hidden sm:block">
+                    <input type="text" placeholder="Buscar ropita..." x-model="searchQuery" 
+                           class="w-48 focus:w-64 transition-all duration-300 pl-10 pr-4 py-2 text-sm bg-sand-50 border border-sand-200 rounded-full focus:outline-none focus:ring-2 focus:ring-sand-400 focus:bg-white text-sand-800 placeholder-sand-400">
+                    <i data-lucide="search" class="w-4 h-4 text-sand-400 absolute left-3.5 top-2.5"></i>
+                </div>
+
+                <!-- Botón de Carrito con Contador Beige -->
+                <button @click="cartOpen = true" class="relative p-2.5 rounded-full bg-white hover:bg-sand-50 transition-colors shadow-sm border border-sand-200 group">
+                    <i data-lucide="shopping-bag" class="w-5 h-5 text-sand-700 group-hover:scale-110 transition-transform"></i>
+                    <template x-if="cartCount > 0">
+                        <span class="absolute -top-1 -right-1 bg-sand-600 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center animate-bounce shadow" x-text="cartCount"></span>
+                    </template>
+                </button>
+
+                <!-- Botón de Menú Móvil -->
+                <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2 rounded-lg text-sand-700 hover:bg-sand-100">
+                    <i data-lucide="menu" class="w-6 h-6" x-show="!mobileMenuOpen"></i>
+                    <i data-lucide="x" class="w-6 h-6" x-show="mobileMenuOpen" style="display: none;"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Menú Móvil Desplegable -->
+        <div x-show="mobileMenuOpen" x-transition class="md:hidden border-t border-sand-200 bg-white px-4 py-4 space-y-3 shadow-lg absolute w-full left-0 z-30" style="display: none;">
+            <div class="mb-3">
+                <input type="text" placeholder="Buscar ropita..." x-model="searchQuery" 
+                       class="w-full pl-10 pr-4 py-2 text-sm bg-sand-50 border border-sand-200 rounded-full focus:outline-none focus:ring-2 focus:ring-sand-400 text-sand-800">
+            </div>
+            <a href="#catalogo" @click="activeCategory = 'todos'; mobileMenuOpen = false" class="block px-4 py-2 rounded-lg text-sand-700 hover:bg-sand-50 font-medium">Ver Todo el Catálogo</a>
+            <a href="#catalogo" @click="activeCategory = 'bebes'; mobileMenuOpen = false" class="block px-4 py-2 rounded-lg text-sand-700 hover:bg-sand-50 font-medium">Bebés (0-24 meses)</a>
+            <a href="#catalogo" @click="activeCategory = 'ninos'; mobileMenuOpen = false" class="block px-4 py-2 rounded-lg text-sand-700 hover:bg-sand-50 font-medium">Niños (2-6 años)</a>
+            <a href="#probador" @click="mobileMenuOpen = false" class="block px-4 py-2 rounded-lg bg-sand-50 text-sand-700 font-medium flex items-center gap-2">
+                <i data-lucide="sparkles" class="w-4 h-4 text-sand-500 animate-pulse"></i> Probador Mágico
+            </a>
+            <a href="#talles" @click="mobileMenuOpen = false" class="block px-4 py-2 rounded-lg text-sand-700 hover:bg-sand-50 font-medium">Calculadora de Talles</a>
+        </div>
+    </header>
+
+    <section class="relative overflow-hidden pt-12 pb-20 md:py-28">
+        <!-- Nubes beige de fondo -->
+        <div class="absolute top-10 left-[5%] text-sand-200/30 animate-float pointer-events-none">
+            <svg class="w-40 h-40" fill="currentColor" viewBox="0 0 24 24"><path d="M19.36 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.64-4.96z"/></svg>
+        </div>
+        <div class="absolute bottom-10 right-[5%] text-sand-200/20 animate-float-slow pointer-events-none">
+            <svg class="w-56 h-56" fill="currentColor" viewBox="0 0 24 24"><path d="M19.36 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.64-4.96z"/></svg>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <!-- Textos Principales -->
+                <div class="text-center lg:text-left space-y-6">
+                    <span class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-sand-100 text-sand-800 text-xs font-bold tracking-wider uppercase animate-pulse-gentle border border-sand-200/60 shadow-xs">
+                        🤎 Colección Orgánica Otoño-Invierno
+                    </span>
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-sand-800 leading-tight">
+                        Viste a tus pequeños con la suavidad de <span class="bg-gradient-to-r from-sand-500 to-sand-700 bg-clip-text text-transparent font-black">una nube beige</span>
+                    </h1>
+                    <p class="text-lg text-sand-600 max-w-xl mx-auto lg:mx-0 font-medium">
+                        Ropita en tonos naturales fabricada con algodón orgánico premium, hipoalergénica y diseñada con la calidez y la dulzura que tu hogar merece en Uruguay.
+                    </p>
+                    
+                    <!-- CTAs -->
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+                        <a href="#catalogo" class="w-full sm:w-auto px-8 py-4 rounded-full bg-sand-600 hover:bg-sand-700 text-white font-bold text-lg text-center shadow-lg shadow-sand-200 hover:shadow-sand-300 transition-all transform hover:-translate-y-1">
+                            Ver Catálogo Sostenible
+                        </a>
+                        <a href="#probador" class="w-full sm:w-auto px-8 py-4 rounded-full bg-white hover:bg-sand-50 text-sand-700 border-2 border-sand-200 hover:border-sand-300 font-bold text-lg text-center transition-all flex items-center justify-center gap-2 group transform hover:-translate-y-1 shadow-sm">
+                            <i data-lucide="sparkles" class="w-5 h-5 group-hover:rotate-12 transition-transform text-sand-500"></i>
+                            Armar un Conjunto Cozy
+                        </a>
+                    </div>
+
+                    <!-- Pequeñas Características del Hero -->
+                    <div class="grid grid-cols-3 gap-4 pt-8 border-t border-sand-200/50 max-w-md mx-auto lg:mx-0">
+                        <div class="text-center lg:text-left">
+                            <span class="block text-2xl font-bold text-sand-600">100%</span>
+                            <span class="text-xs text-sand-500 font-bold uppercase">Algodón Orgánico</span>
+                        </div>
+                        <div class="text-center lg:text-left">
+                            <span class="block text-2xl font-bold text-sand-600">Suave</span>
+                            <span class="text-xs text-sand-500 font-bold uppercase">Hipoalergénico</span>
+                        </div>
+                        <div class="text-center lg:text-left">
+                            <span class="block text-2xl font-bold text-sand-600">Lino</span>
+                            <span class="text-xs text-sand-500 font-bold uppercase">Fácil Lavado</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Imagen Destacada del Hero (Bebé de tonos neutrales) -->
+                <div class="relative flex justify-center">
+                    <div class="absolute -inset-2 bg-gradient-to-tr from-sand-200 to-sand-100 rounded-[50px] rotate-3 blur-sm opacity-60"></div>
+                    <div class="relative w-full max-w-md h-[400px] sm:h-[450px] rounded-[40px] overflow-hidden shadow-2xl border-4 border-white bg-sand-50 flex items-center justify-center">
+                        <img src="https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?auto=format&fit=crop&w=600&q=80" 
+                             alt="Bebé vistiendo Nubecita Kids Boho"
+                             class="w-full h-full object-cover"
+                             onerror="this.src='https://placehold.co/600x650/f4efe6/755e45?text=Nubecita+Boho'">
+                        
+                        <!-- Mini tarjetita flotante en la foto -->
+                        <div class="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-xs p-4 rounded-2xl shadow-lg flex items-center justify-between border border-sand-200/40">
+                            <div>
+                                <span class="text-xs text-sand-500 font-bold uppercase tracking-widest">Favorito de Mamás</span>
+                                <h4 class="text-sm font-bold text-sand-800">Enterito Hilo Tejido Sand</h4>
+                            </div>
+                            <span class="bg-sand-100 text-sand-800 text-xs font-black px-3 py-1.5 rounded-full">$U 890</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="py-12 bg-white border-y border-sand-200/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-center text-xs font-bold uppercase tracking-widest text-sand-400 mb-8">Explora por Categorías Orgánicas</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                
+                <!-- Categoría Bebés -->
+                <a href="#catalogo" @click="activeCategory = 'bebes'" class="group bg-sand-50/70 hover:bg-sand-100 p-6 rounded-3xl text-center border border-sand-200/50 transition-all hover:shadow-md transform hover:-translate-y-1">
+                    <div class="w-16 h-16 bg-white rounded-2xl mx-auto flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform border border-sand-200/30">
+                        <span class="text-3xl">🍼</span>
+                    </div>
+                    <h3 class="font-bold text-sand-800 mt-4 group-hover:text-sand-600 transition-colors">Bebés</h3>
+                    <p class="text-xs text-sand-500">0 a 24 meses</p>
+                </a>
+
+                <!-- Categoría Niños -->
+                <a href="#catalogo" @click="activeCategory = 'ninos'" class="group bg-sand-50/70 hover:bg-sand-100 p-6 rounded-3xl text-center border border-sand-200/50 transition-all hover:shadow-md transform hover:-translate-y-1">
+                    <div class="w-16 h-16 bg-white rounded-2xl mx-auto flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform border border-sand-200/30">
+                        <span class="text-3xl">🧸</span>
+                    </div>
+                    <h3 class="font-bold text-sand-800 mt-4 group-hover:text-sand-600 transition-colors">Niños</h3>
+                    <p class="text-xs text-sand-500">2 a 6 años</p>
+                </a>
+
+                <!-- Categoría Accesorios -->
+                <a href="#catalogo" @click="activeCategory = 'accesorios'" class="group bg-sand-50/70 hover:bg-sand-100 p-6 rounded-3xl text-center border border-sand-200/50 transition-all hover:shadow-md transform hover:-translate-y-1">
+                    <div class="w-16 h-16 bg-white rounded-2xl mx-auto flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform border border-sand-200/30">
+                        <span class="text-3xl">👑</span>
+                    </div>
+                    <h3 class="font-bold text-sand-800 mt-4 group-hover:text-sand-600 transition-colors">Accesorios</h3>
+                    <p class="text-xs text-sand-500">Gorros, mantas y más</p>
+                </a>
+
+                <!-- Probador Virtual Link -->
+                <a href="#probador" class="group bg-sand-100/60 hover:bg-sand-100 p-6 rounded-3xl text-center border border-sand-200/80 transition-all hover:shadow-md transform hover:-translate-y-1">
+                    <div class="w-16 h-16 bg-white rounded-2xl mx-auto flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform border border-sand-200/30">
+                        <span class="text-3xl">✨</span>
+                    </div>
+                    <h3 class="font-bold text-sand-800 mt-4 group-hover:text-sand-600 transition-colors">Armar Conjunto</h3>
+                    <p class="text-xs text-sand-600 font-semibold">¡Súper interactivo!</p>
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="probador" class="py-16 bg-gradient-to-b from-[#FAF8F5] to-sand-100/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <span class="text-sand-500 font-extrabold text-sm uppercase tracking-widest block mb-2">PROBADOR VIRTUAL COZY</span>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-sand-800">Crea el Outfit Perfecto 🧸</h2>
+                <p class="text-sand-600 mt-2 font-medium">Combina prendas superiores, inferiores y accesorios de nuestra colección lino y tierra. ¡Visualiza tu conjunto orgánico y agrégalo con un solo clic!</p>
+            </div>
+
+            <!-- Contenedor del Outfit Builder -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                
+                <!-- Panel de Selección de Prendas -->
+                <div class="lg:col-span-7 bg-white p-6 rounded-[32px] shadow-xl border border-sand-200/60 flex flex-col justify-between">
+                    <div class="space-y-6">
+                        
+                        <!-- 1. Parte Superior -->
+                        <div>
+                            <span class="text-xs font-extrabold text-sand-500 uppercase tracking-widest block mb-3">1. Elige la Parte Superior</span>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <template x-for="item in outfitTops" :key="item.id">
+                                    <button @click="selectedOutfitTop = item" 
+                                            :class="selectedOutfitTop.id === item.id ? 'border-sand-500 bg-sand-50 ring-2 ring-sand-300' : 'border-sand-100 hover:bg-sand-50/50'"
+                                            class="p-3 border rounded-2xl text-left transition-all flex items-center space-x-3">
+                                        <span class="text-2xl" x-text="item.emoji"></span>
+                                        <div>
+                                            <p class="text-xs font-bold text-sand-800 leading-tight" x-text="item.name"></p>
+                                            <p class="text-[10px] text-sand-500 font-semibold" x-text="'$U ' + item.price"></p>
+                                        </div>
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
+
+                        <!-- 2. Parte Inferior -->
+                        <div>
+                            <span class="text-xs font-extrabold text-sand-500 uppercase tracking-widest block mb-3">2. Elige la Parte Inferior</span>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <template x-for="item in outfitBottoms" :key="item.id">
+                                    <button @click="selectedOutfitBottom = item" 
+                                            :class="selectedOutfitBottom.id === item.id ? 'border-sand-500 bg-sand-50 ring-2 ring-sand-300' : 'border-sand-100 hover:bg-sand-50/50'"
+                                            class="p-3 border rounded-2xl text-left transition-all flex items-center space-x-3">
+                                        <span class="text-2xl" x-text="item.emoji"></span>
+                                        <div>
+                                            <p class="text-xs font-bold text-sand-800 leading-tight" x-text="item.name"></p>
+                                            <p class="text-[10px] text-sand-500 font-semibold" x-text="'$U ' + item.price"></p>
+                                        </div>
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
+
+                        <!-- 3. Elige el Accesorio -->
+                        <div>
+                            <span class="text-xs font-extrabold text-sand-500 uppercase tracking-widest block mb-3">3. Elige el Accesorio</span>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <template x-for="item in outfitAccessories" :key="item.id">
+                                    <button @click="selectedOutfitAccessory = item" 
+                                            :class="selectedOutfitAccessory.id === item.id ? 'border-sand-500 bg-sand-50 ring-2 ring-sand-300' : 'border-sand-100 hover:bg-sand-50/50'"
+                                            class="p-3 border rounded-2xl text-left transition-all flex items-center space-x-3">
+                                        <span class="text-2xl" x-text="item.emoji"></span>
+                                        <div>
+                                            <p class="text-xs font-bold text-sand-800 leading-tight" x-text="item.name"></p>
+                                            <p class="text-[10px] text-sand-500 font-semibold" x-text="'$U ' + item.price"></p>
+                                        </div>
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Nota de calidad en probador -->
+                    <div class="mt-8 p-3.5 bg-sand-50 rounded-2xl flex items-center gap-2.5 text-xs text-sand-600 border border-sand-200/50">
+                        <i data-lucide="info" class="w-4 h-4 text-sand-500 flex-shrink-0"></i>
+                        <span>Los conjuntos recomendados se complementan perfectamente para crear looks cálidos, cómodos y de estética orgánica.</span>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 bg-gradient-to-tr from-sand-100 via-sand-50 to-sand-200/70 p-8 rounded-[32px] border border-white flex flex-col justify-between items-center text-center relative overflow-hidden shadow-lg">
+                    
+                    <!-- Fondo decorativo tipo Nube -->
+                    <div class="absolute -top-12 -left-12 text-white/40 animate-float pointer-events-none">
+                        <svg class="w-32 h-32" fill="currentColor" viewBox="0 0 24 24"><path d="M19.36 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.64-4.96z"/></svg>
+                    </div>
+                    
+                    <!-- Encabezado del Outfit -->
+                    <div class="relative z-10 w-full">
+                        <span class="bg-white/90 backdrop-blur-xs text-sand-700 px-4 py-1.5 rounded-full text-xs font-bold shadow-xs border border-sand-200/50">Vista Previa del Conjunto Cozy</span>
+                    </div>
+
+                    <!-- Representación Gráfica Tierna -->
+                    <div class="my-6 relative z-10 flex flex-col items-center justify-center space-y-4 py-6">
+                        
+                        <!-- Perchero / Gorrito / Accesorio -->
+                        <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-md animate-float relative border-2 border-sand-200">
+                            <span class="text-5xl" x-text="selectedOutfitAccessory ? selectedOutfitAccessory.emoji : '🐻'"></span>
+                            <span class="absolute -bottom-2.5 bg-sand-600 text-white text-[9px] px-2.5 py-1 rounded-full font-bold uppercase tracking-wider" x-text="selectedOutfitAccessory ? selectedOutfitAccessory.name : 'Accesorio'"></span>
+                        </div>
+
+                        <!-- Conector percha virtual -->
+                        <div class="w-1.5 h-6 bg-sand-300 rounded"></div>
+
+                        <!-- Parte Superior -->
+                        <div class="w-28 h-28 bg-white rounded-full flex items-center justify-center shadow-md animate-float-slow relative border-2 border-sand-200" style="animation-delay: 1s;">
+                            <span class="text-5xl" x-text="selectedOutfitTop ? selectedOutfitTop.emoji : '👕'"></span>
+                            <span class="absolute -bottom-2.5 bg-sand-700 text-white text-[9px] px-2.5 py-1 rounded-full font-bold uppercase tracking-wider" x-text="selectedOutfitTop ? selectedOutfitTop.name : 'Prenda Superior'"></span>
+                        </div>
+
+                        <!-- Conector percha virtual -->
+                        <div class="w-1.5 h-6 bg-sand-300 rounded"></div>
+
+                        <!-- Parte Inferior -->
+                        <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-md animate-float relative border-2 border-sand-200" style="animation-delay: 2s;">
+                            <span class="text-5xl" x-text="selectedOutfitBottom ? selectedOutfitBottom.emoji : '👖'"></span>
+                            <span class="absolute -bottom-2.5 bg-sand-600 text-white text-[9px] px-2.5 py-1 rounded-full font-bold uppercase tracking-wider" x-text="selectedOutfitBottom ? selectedOutfitBottom.name : 'Prenda Inferior'"></span>
+                        </div>
+
+                    </div>
+
+                    <!-- Resumen de Compra de Conjunto -->
+                    <div class="w-full bg-white/95 backdrop-blur-xs p-5 rounded-2xl shadow-md border border-sand-200/50 relative z-10">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-sand-600 text-sm font-semibold">Total del Look:</span>
+                            <span class="text-2xl font-black text-sand-800" x-text="'$U ' + ( (selectedOutfitTop ? selectedOutfitTop.price : 0) + (selectedOutfitBottom ? selectedOutfitBottom.price : 0) + (selectedOutfitAccessory ? selectedOutfitAccessory.price : 0) ).toLocaleString()"></span>
+                        </div>
+                        <button @click="addOutfitToCart()" class="w-full bg-sand-600 hover:bg-sand-700 text-white font-bold py-3.5 px-6 rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
+                            <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                            Agregar Look Completo
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="catalogo" class="py-16 bg-white scroll-mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Título y Filtro de Categorías -->
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+                <div>
+                    <span class="text-sand-500 font-extrabold text-xs uppercase tracking-widest block mb-2">SELECCIÓN NATURAL</span>
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-sand-800">Catálogo de Ropita Dulce</h2>
+                </div>
+                
+                <!-- Botonera Filtros de Lino -->
+                <div class="flex flex-wrap gap-2.5">
+                    <button @click="activeCategory = 'todos'" 
+                            :class="activeCategory === 'todos' ? 'bg-sand-600 text-white shadow-md' : 'bg-sand-50 text-sand-700 hover:bg-sand-100 border border-sand-200'"
+                            class="px-5 py-2.5 rounded-full text-sm font-bold transition-all">✨ Todos</button>
+                    
+                    <button @click="activeCategory = 'bebes'" 
+                            :class="activeCategory === 'bebes' ? 'bg-sand-600 text-white shadow-md' : 'bg-sand-50 text-sand-700 hover:bg-sand-100 border border-sand-200'"
+                            class="px-5 py-2.5 rounded-full text-sm font-bold transition-all">🍼 Bebés</button>
+                    
+                    <button @click="activeCategory = 'ninos'" 
+                            :class="activeCategory === 'ninos' ? 'bg-sand-600 text-white shadow-md' : 'bg-sand-50 text-sand-700 hover:bg-sand-100 border border-sand-200'"
+                            class="px-5 py-2.5 rounded-full text-sm font-bold transition-all">🧸 Niños</button>
+                    
+                    <button @click="activeCategory = 'accesorios'" 
+                            :class="activeCategory === 'accesorios' ? 'bg-sand-600 text-white shadow-md' : 'bg-sand-50 text-sand-700 hover:bg-sand-100 border border-sand-200'"
+                            class="px-5 py-2.5 rounded-full text-sm font-bold transition-all">👑 Accesorios</button>
+                </div>
+            </div>
+
+            <!-- Grilla de Productos de Algodón Orgánico -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <template x-for="product in filteredProducts()" :key="product.id">
+                    <div class="group bg-[#FAF8F5] rounded-3xl overflow-hidden border border-sand-200 hover:border-sand-300 transition-all hover:shadow-xl flex flex-col h-full transform hover:-translate-y-1 relative">
+                        
+                        <!-- Badges informativos flotantes -->
+                        <template x-if="product.isNew">
+                            <span class="absolute top-4 left-4 bg-sand-600 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider z-10 shadow">Nuevo</span>
+                        </template>
+
+                        <!-- Contenedor de Imagen con Efecto Hover Zoom -->
+                        <div class="relative aspect-square w-full bg-sand-100 overflow-hidden cursor-pointer border-b border-sand-200" @click="openQuickView(product)">
+                            <img :src="product.image" 
+                                 :alt="product.name" 
+                                 class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                                 onerror="this.src='https://placehold.co/400x400/faf6f0/8e775b?text=Prenda+Boho'">
+                            
+                            <!-- Botón de Vista Rápida flotante -->
+                            <div class="absolute inset-0 bg-sand-900/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <span class="bg-white/95 backdrop-blur-xs px-4 py-2 rounded-full text-xs font-bold text-sand-800 shadow-sm flex items-center gap-1 border border-sand-200/50">
+                                    <i data-lucide="eye" class="w-3.5 h-3.5"></i> Vista Rápida
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Detalles del Producto -->
+                        <div class="p-6 flex flex-col justify-between flex-grow">
+                            <div>
+                                <!-- Rating y Categoría -->
+                                <div class="flex items-center justify-between text-xs text-sand-500 font-bold mb-2">
+                                    <span class="capitalize" x-text="product.category === 'bebes' ? 'Bebé 0-24m' : (product.category === 'ninos' ? 'Niño 2-6a' : 'Accesorio')"></span>
+                                    <div class="flex items-center text-sand-500 gap-0.5">
+                                        <i data-lucide="star" class="w-3 h-3 fill-sand-500 text-sand-500"></i>
+                                        <span class="text-sand-700 font-black" x-text="product.rating"></span>
+                                    </div>
+                                </div>
+                                
+                                <h3 class="font-extrabold text-sand-800 text-lg group-hover:text-sand-600 transition-colors line-clamp-1" x-text="product.name"></h3>
+                                <p class="text-xs text-sand-500 mt-1 line-clamp-2" x-text="product.description"></p>
+                            </div>
+
+                            <div class="mt-6">
+                                <!-- Precios en pesos uruguayos -->
+                                <div class="flex items-baseline space-x-2 mb-4">
+                                    <span class="text-2xl font-black text-sand-800" x-text="'$U ' + product.price.toLocaleString()"></span>
+                                    <template x-if="product.oldPrice">
+                                        <span class="text-sm text-sand-400 line-through" x-text="'$U ' + product.oldPrice.toLocaleString()"></span>
+                                    </template>
+                                </div>
+
+                                <!-- Botón Agregar al Carrito -->
+                                <button @click="addToCart(product)" class="w-full bg-white hover:bg-sand-600 hover:text-white border-2 border-sand-200 hover:border-sand-600 text-sand-700 font-bold py-3 rounded-2xl transition-all flex items-center justify-center gap-2 group/btn">
+                                    <i data-lucide="shopping-cart" class="w-4 h-4 group-hover/btn:scale-110 transition-transform"></i>
+                                    Agregar al Carrito
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </template>
+            </div>
+
+            <div x-show="filteredProducts().length === 0" class="text-center py-20 bg-sand-50 rounded-3xl border border-dashed border-sand-300" style="display: none;">
+                <span class="text-5xl">🧸</span>
+                <p class="text-sand-600 font-bold mt-4">No encontramos ropita que coincida con tu búsqueda.</p>
+                <button @click="searchQuery = ''; activeCategory = 'todos'" class="text-sand-500 font-bold underline mt-2">Ver todos los productos</button>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="talles" class="py-16 bg-[#FAF8F5] border-t border-sand-200/50 scroll-mt-20">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6">
+            <div class="bg-gradient-to-tr from-sand-100 via-white to-sand-200/40 rounded-[40px] border-2 border-white p-8 md:p-12 shadow-xl">
+                
+                <div class="text-center mb-10">
+                    <span class="text-sand-500 font-extrabold text-xs uppercase tracking-widest block mb-2">GUÍA DE TALLES INTELIGENTE</span>
+                    <h2 class="text-3xl font-extrabold text-sand-800">¿Qué talle le quedará mejor? 🧸</h2>
+                    <p class="text-sand-600 mt-1 font-medium">Los bebés crecen súper rápido. Ingresa sus datos para recomendarte el talle perfecto en segundos.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    
+                    <!-- Formulario de Medidas -->
+                    <div class="space-y-6 bg-white p-6 rounded-3xl shadow-sm border border-sand-200">
+                        
+                        <!-- Rango de edad sugerido -->
+                        <div>
+                            <label class="block text-sm font-bold text-sand-700 mb-2">Edad aproximada:</label>
+                            <select x-model="finderAge" class="w-full border-2 border-sand-100 focus:border-sand-300 rounded-2xl p-3 focus:outline-none text-sand-600 font-medium bg-sand-50/50">
+                                <option value="0-3">Recién Nacido (0-3 meses)</option>
+                                <option value="3-6">Bebé Chico (3-6 meses)</option>
+                                <option value="6-12">Bebé Mediano (6-12 meses)</option>
+                                <option value="12-24">Bebé Grande (12-24 meses)</option>
+                                <option value="2-4">Niño / Niña (2-4 años)</option>
+                                <option value="4-6">Niño / Niña (4-6 años)</option>
+                            </select>
+                        </div>
+
+                        <!-- Estatura (cm) -->
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="text-sm font-bold text-sand-700">Estatura:</label>
+                                <span class="text-sm font-bold text-sand-600" x-text="finderHeight + ' cm'"></span>
+                            </div>
+                            <input type="range" min="45" max="120" x-model="finderHeight" 
+                                   class="w-full h-2 bg-sand-200 rounded-lg appearance-none cursor-pointer accent-sand-600">
+                        </div>
+
+                        <!-- Peso (kg) -->
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="text-sm font-bold text-sand-700">Peso estimado:</label>
+                                <span class="text-sm font-bold text-sand-600" x-text="finderWeight + ' kg'"></span>
+                            </div>
+                            <input type="range" min="3" max="25" step="0.5" x-model="finderWeight" 
+                                   class="w-full h-2 bg-sand-200 rounded-lg appearance-none cursor-pointer accent-sand-600">
+                        </div>
+
+                    </div>
+
+                    <!-- Resultado de Talle Sugerido -->
+                    <div class="text-center md:text-left space-y-4 md:pl-6">
+                        <span class="text-xs font-bold text-sand-500 uppercase tracking-widest block">Recomendación de Nubecita</span>
+                        
+                        <div class="bg-gradient-to-r from-sand-600 to-sand-700 text-white rounded-3xl p-6 shadow-md inline-block w-full">
+                            <span class="text-xs uppercase font-extrabold tracking-widest opacity-80 block">TALLE SUGERIDO</span>
+                            <span class="text-4xl font-black block mt-1" x-text="calculateSize()"></span>
+                        </div>
+
+                        <div class="space-y-2">
+                            <div class="flex items-start space-x-2.5 text-xs text-sand-600 text-left">
+                                <i data-lucide="check-circle" class="w-4 h-4 text-sand-500 flex-shrink-0 mt-0.5"></i>
+                                <span>Ideal para prendas de algodón y lino suave Nubecita.</span>
+                            </div>
+                            <div class="flex items-start space-x-2.5 text-xs text-sand-600 text-left">
+                                <i data-lucide="help-circle" class="w-4 h-4 text-sand-400 flex-shrink-0 mt-0.5"></i>
+                                <span>¿Está entre dos talles? Te aconsejamos llevar siempre el más grande para máxima holgura y comodidad.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 bg-white border-t border-sand-200/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <span class="text-sand-500 font-extrabold text-sm uppercase tracking-widest block mb-2">COMUNIDAD NUBECITA COZY</span>
+                <h2 class="text-3xl font-extrabold text-sand-800">Lo que dicen mamá y papá 🧸</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <!-- Testimonio 1 -->
+                <div class="bg-sand-50/50 p-8 rounded-3xl border border-sand-200 relative">
+                    <span class="text-4xl text-sand-300 absolute top-4 right-6 font-serif">“</span>
+                    <div class="flex items-center space-x-1 text-sand-500 mb-4">
+                        <i data-lucide="star" class="w-4 h-4 fill-sand-500"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-sand-500"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-sand-500"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-sand-500"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-sand-500"></i>
+                    </div>
+                    <p class="text-sand-700 text-sm italic mb-6">"Compré el enterito de oso tejido para mi bebé de 4 meses y de verdad que la suavidad es insuperable. No le causó ninguna irritación en su piel atópica. ¡Estética hermosa!"</p>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-sand-200 flex items-center justify-center font-bold text-sand-700 text-sm">ML</div>
+                        <div>
+                            <h4 class="font-bold text-sand-800 text-sm">María Laura G.</h4>
+                            <p class="text-[10px] text-sand-500 font-medium">Mamá de Benjamín (4m) — Montevideo</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonio 2 -->
+                <div class="bg-sand-50/50 p-8 rounded-3xl border border-sand-200 relative">
+                    <span class="text-4xl text-sand-300 absolute top-4 right-6 font-serif">“</span>
+                    <div class="flex items-center space-x-1 text-sand-500 mb-4">
+                        <i data-lucide="star" class="w-4 h-4 fill-sand-500"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-sand-500"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-sand-500"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-sand-500"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-sand-500"></i>
+                    </div>
+                    <p class="text-sand-700 text-sm italic mb-6">"La herramienta del Probador de Conjuntos me encantó. Armé todo el outfit en tonos tierra para mi nena de 3 años, lo agregué al carrito y el envío llegó perfecto."</p>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-sand-200 flex items-center justify-center font-bold text-sand-700 text-sm">FP</div>
+                        <div>
+                            <h4 class="font-bold text-sand-800 text-sm">Federico P.</h4>
+                            <p class="text-[10px] text-sand-500 font-medium">Papá de Delfina (3a) — Maldonado</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonio 3 -->
+                <div class="bg-sand-50/50 p-8 rounded-3xl border border-sand-200 relative">
+                    <span class="text-4xl text-sand-300 absolute top-4 right-6 font-serif">“</span>
+                    <div class="flex items-center space-x-1 text-sand-500 mb-4">
+                        <i data-lucide="star" class="w-4 h-4 fill-sand-500"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-sand-500"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-sand-500"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-sand-500"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-sand-500"></i>
+                    </div>
+                    <p class="text-sand-700 text-sm italic mb-6">"Increíble calidad de confección. Se nota que las prendas de Nubecita están cuidadas hasta en el más mínimo detalle de las costuras y los botones de madera."</p>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-sand-200 flex items-center justify-center font-bold text-sand-700 text-sm">AL</div>
+                        <div>
+                            <h4 class="font-bold text-sand-800 text-sm">Ana Luz S.</h4>
+                            <p class="text-[10px] text-sand-500 font-medium">Mamá de Joaquín (18m) — Colonia</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <div x-show="cartOpen" class="fixed inset-0 z-50 overflow-hidden" style="display: none;" role="dialog" aria-modal="true">
+        <div class="absolute inset-0 overflow-hidden">
+            <!-- Overlay oscuro de fondo -->
+            <div @click="cartOpen = false" class="absolute inset-0 bg-sand-900/35 backdrop-blur-sm transition-opacity"></div>
+
+            <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+                <div class="pointer-events-auto w-screen max-w-md">
+                    <div class="flex h-full flex-col bg-white shadow-2xl rounded-l-[32px] border-l border-sand-200 overflow-hidden">
+                        
+                        <!-- Header del Carrito -->
+                        <div class="px-6 py-6 bg-sand-50 border-b border-sand-200/60 flex items-center justify-between">
+                            <div class="flex items-center space-x-2.5">
+                                <i data-lucide="shopping-bag" class="w-5 h-5 text-sand-600"></i>
+                                <h2 class="text-lg font-bold text-sand-850">Mi Bolsa de Nubecitas</h2>
+                            </div>
+                            <button @click="cartOpen = false" class="p-2 rounded-full hover:bg-sand-100 text-sand-400 hover:text-sand-600 transition-colors">
+                                <i data-lucide="x" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+
+                        <!-- Lista de Ítems del Carrito -->
+                        <div class="flex-1 overflow-y-auto px-6 py-6 divide-y divide-sand-100">
+                            <template x-if="cart.length === 0">
+                                <div class="text-center py-20">
+                                    <span class="text-5xl">☁️</span>
+                                    <p class="text-sand-500 font-bold mt-4">Tu carrito está vacío.</p>
+                                    <p class="text-xs text-sand-400 mt-1">¡Súmale la mejor ropita de lino!</p>
+                                    <button @click="cartOpen = false" class="mt-6 bg-sand-600 hover:bg-sand-700 text-white font-bold px-6 py-3 rounded-2xl text-sm transition-colors shadow-sm">Continuar Comprando</button>
+                                </div>
+                            </template>
+
+                            <template x-for="item in cart" :key="item.id + '-' + item.selectedSize">
+                                <div class="flex py-4 space-x-4 items-center">
+                                    <div class="h-20 w-20 flex-shrink-0 overflow-hidden rounded-2xl border border-sand-200 bg-sand-50">
+                                        <img :src="item.image" :alt="item.name" class="h-full w-full object-cover" onerror="this.src='https://placehold.co/100x100?text=Prenda'">
+                                    </div>
+
+                                    <div class="flex-1 flex flex-col justify-between">
+                                        <div>
+                                            <h4 class="text-sm font-bold text-sand-800 line-clamp-1" x-text="item.name"></h4>
+                                            <p class="text-xs text-sand-500 mt-0.5 font-semibold" x-text="'Talle: ' + item.selectedSize"></p>
+                                        </div>
+                                        <div class="flex items-center justify-between mt-2">
+                                            <!-- Controladores de Cantidad -->
+                                            <div class="flex items-center border border-sand-200 rounded-full px-2 py-0.5 space-x-2">
+                                                <button @click="decreaseQty(item)" class="text-sand-400 hover:text-sand-700 px-1 font-bold text-xs">-</button>
+                                                <span class="text-xs font-bold text-sand-800" x-text="item.quantity"></span>
+                                                <button @click="increaseQty(item)" class="text-sand-400 hover:text-sand-700 px-1 font-bold text-xs">+</button>
+                                            </div>
+                                            <!-- Precio -->
+                                            <span class="text-sm font-black text-sand-800" x-text="'$U ' + (item.price * item.quantity).toLocaleString()"></span>
+                                        </div>
+                                    </div>
+
+                                    <button @click="removeFromCart(item)" class="text-sand-300 hover:text-sand-600 p-1">
+                                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                            </template>
+                        </div>
+
+                        <!-- Barra de Progreso Envío Gratis (UYU 4500) -->
+                        <div class="px-6 py-3 bg-sand-50 border-t border-sand-200/60" x-show="cart.length > 0">
+                            <div class="flex justify-between text-xs font-bold text-sand-600 mb-1.5">
+                                <span x-text="cartTotal >= 4500 ? '¡Felicidades! Tienes envío gratis 🚚' : 'Te faltan $U ' + (4500 - cartTotal).toLocaleString() + ' para envío gratis'"></span>
+                                <span class="text-sand-700" x-text="Math.min(100, Math.round((cartTotal / 4500) * 100)) + '%'"></span>
+                            </div>
+                            <div class="w-full bg-sand-200 rounded-full h-2 overflow-hidden">
+                                <div class="bg-sand-600 h-full transition-all duration-500" :style="'width: ' + Math.min(100, (cartTotal / 4500) * 100) + '%'"></div>
+                            </div>
+                        </div>
+
+                        <!-- Totales y Botón de Pago en Pesos Uruguayos -->
+                        <div class="border-t border-sand-200 px-6 py-6 bg-white space-y-4" x-show="cart.length > 0">
+                            <div class="flex justify-between text-base font-bold text-sand-800">
+                                <span>Subtotal:</span>
+                                <span x-text="'$U ' + cartTotal.toLocaleString()"></span>
+                            </div>
+                            <div class="flex justify-between text-xs text-sand-500 font-semibold">
+                                <span>Envío:</span>
+                                <span x-text="cartTotal >= 4500 ? 'Gratis' : '$U 290'"></span>
+                            </div>
+                            <div class="border-t border-dashed border-sand-200 pt-3 flex justify-between text-lg font-black text-sand-900">
+                                <span>Total Estimado:</span>
+                                <span x-text="'$U ' + (cartTotal >= 4500 ? cartTotal : cartTotal + 290).toLocaleString()"></span>
+                            </div>
+
+                            <!-- Botón de Proceder al Pago / Simular Compra -->
+                            <button @click="showSimulatedCheckout()" class="w-full bg-sand-600 hover:bg-sand-700 text-white font-bold py-4 rounded-2xl shadow-md transition-all flex items-center justify-center gap-2">
+                                <i data-lucide="shield-check" class="w-5 h-5"></i>
+                                Iniciar Compra Segura
+                            </button>
+                            <p class="text-[10px] text-center text-sand-400">Simulación segura de e-commerce uruguayo.</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick View Modal -->
+    <div x-show="quickViewOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-sand-900/35 backdrop-blur-sm" style="display: none;">
+        <div @click.away="quickViewOpen = false" class="bg-white rounded-[32px] max-w-2xl w-full overflow-hidden shadow-2xl border border-sand-200 flex flex-col md:flex-row relative">
+            
+            <button @click="quickViewOpen = false" class="absolute top-4 right-4 z-10 bg-white/80 hover:bg-white p-2 rounded-full text-sand-400 hover:text-sand-600 shadow-sm border border-sand-100">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <!-- Imagen Izquierda -->
+            <div class="w-full md:w-1/2 aspect-square bg-sand-50">
+                <img :src="quickProduct.image" :alt="quickProduct.name" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x400?text=Prenda'">
+            </div>
+
+            <!-- Detalles Derecha -->
+            <div class="w-full md:w-1/2 p-6 md:p-8 flex flex-col justify-between">
+                <div>
+                    <span class="text-xs font-bold text-sand-500 uppercase tracking-widest block mb-2" x-text="quickProduct.category === 'bebes' ? 'Bebés 0-24 meses' : (quickProduct.category === 'ninos' ? 'Niños 2-6 años' : 'Accesorio')"></span>
+                    <h3 class="text-2xl font-black text-sand-800" x-text="quickProduct.name"></h3>
+                    <p class="text-sm text-sand-600 mt-2 font-medium" x-text="quickProduct.description"></p>
+
+                    <!-- Seleccionador de Talles -->
+                    <div class="mt-6">
+                        <span class="text-xs font-bold text-sand-700 block mb-2.5">Seleccionar Talle:</span>
+                        <div class="flex flex-wrap gap-2">
+                            <template x-for="size in quickProduct.sizes" :key="size">
+                                <button @click="selectedSize = size"
+                                        :class="selectedSize === size ? 'bg-sand-600 text-white shadow' : 'bg-sand-50 text-sand-700 hover:bg-sand-100 border border-sand-200'"
+                                        class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all" x-text="size"></button>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8">
+                    <!-- Precio en pesos uruguayos -->
+                    <div class="flex items-baseline space-x-2 mb-4">
+                        <span class="text-3xl font-black text-sand-800" x-text="'$U ' + quickProduct.price?.toLocaleString()"></span>
+                        <template x-if="quickProduct.oldPrice">
+                            <span class="text-sm text-sand-400 line-through" x-text="'$U ' + quickProduct.oldPrice?.toLocaleString()"></span>
+                        </template>
+                    </div>
+
+                    <button @click="addQuickToCart()" class="w-full bg-sand-600 hover:bg-sand-700 text-white font-bold py-3.5 rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
+                        <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                        Agregar a mi Bolsa
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Simulated Checkout Form -->
+    <div x-show="checkoutOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-sand-900/35 backdrop-blur-sm" style="display: none;">
+        <div class="bg-white rounded-[32px] max-w-md w-full p-8 shadow-2xl border border-sand-200 text-center relative">
+            <button @click="checkoutOpen = false" class="absolute top-4 right-4 p-2 text-sand-400 hover:text-sand-600">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <span class="text-5xl block mb-4">☁️✨</span>
+            <h3 class="text-2xl font-black text-sand-800 mb-2">¡Casi listo para el viaje!</h3>
+            <p class="text-sand-500 text-sm mb-6">Completa tus datos de envío para finalizar tu simulación de compra en Nubecita Kids.</p>
+
+            <form @submit.prevent="completeSimulatedCheckout()" class="space-y-4 text-left">
+                <div>
+                    <label class="block text-xs font-bold text-sand-600 uppercase mb-1">Nombre Completo</label>
+                    <input type="text" required class="w-full border border-sand-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-sand-400 bg-sand-50/30 text-sand-800">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-sand-600 uppercase mb-1">Dirección de Envío (Uruguay)</label>
+                    <input type="text" placeholder="Ej: Av. Italia 1234, Montevideo" required class="w-full border border-sand-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-sand-400 bg-sand-50/30 text-sand-800">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-sand-600 uppercase mb-1">Teléfono</label>
+                        <input type="tel" placeholder="099 123 456" required class="w-full border border-sand-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-sand-400 bg-sand-50/30 text-sand-800">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-sand-600 uppercase mb-1">Departamento</label>
+                        <select class="w-full border border-sand-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-sand-400 bg-sand-50/30 text-sand-800 font-semibold">
+                            <option>Montevideo</option>
+                            <option>Maldonado</option>
+                            <option>Canelones</option>
+                            <option>Colonia</option>
+                            <option>Rocha</option>
+                            <option>Salto</option>
+                            <option>Paysandú</option>
+                            <option>San José</option>
+                            <option>Otros Departamentos</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="bg-sand-50 p-4 rounded-2xl flex items-center justify-between text-xs font-bold text-sand-700 mt-2 border border-sand-200">
+                    <span>Total a Pagar:</span>
+                    <span class="text-sand-600 text-base font-black" x-text="'$U ' + (cartTotal >= 4500 ? cartTotal : cartTotal + 290).toLocaleString()"></span>
+                </div>
+
+                <button type="submit" class="w-full bg-sand-600 hover:bg-sand-700 text-white font-bold py-4 rounded-2xl shadow-md transition-all text-center">
+                    Confirmar Pedido 🧸
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Sistema de Alertas Toast en la esquina -->
+    <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-3 max-w-xs pointer-events-none">
+        <template x-for="toast in toasts" :key="toast.id">
+            <div x-transition class="pointer-events-auto bg-white border-l-4 border-sand-600 shadow-xl rounded-xl p-4 flex items-start space-x-3 transform transition-all duration-300">
+                <div class="bg-sand-50 p-1.5 rounded-full text-sand-600 border border-sand-200">
+                    <i data-lucide="check" class="w-4 h-4"></i>
+                </div>
+                <div>
+                    <p class="text-xs font-black text-sand-800" x-text="toast.title"></p>
+                    <p class="text-[10px] text-sand-500 font-semibold mt-0.5" x-text="toast.message"></p>
+                </div>
+            </div>
+        </template>
+    </div>
+
+    <footer class="bg-sand-900 text-sand-200 pt-16 pb-8 border-t border-sand-850">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+            
+            <!-- Columna Logo e Info -->
+            <div class="space-y-4">
+                <div class="flex items-center space-x-2">
+                    <div class="bg-white p-2 rounded-full shadow">
+                        <svg class="w-6 h-6 text-sand-600" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19.36 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.64-4.96z"/>
+                        </svg>
+                    </div>
+                    <span class="text-xl font-bold tracking-tight text-white">Nubecita Kids</span>
+                </div>
+                <p class="text-xs text-sand-300 leading-relaxed">Vistiendo con suavidad, amor y felicidad orgánica a las nubecitas de tu hogar. Diseños hipoalergénicos sostenibles de alta calidad con estética minimalista en Uruguay.</p>
+                
+                <!-- Redes Sociales -->
+                <div class="flex space-x-3 pt-2">
+                    <a href="#" class="p-2 rounded-full bg-sand-800 hover:bg-sand-600 hover:text-white transition-colors"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+                    <a href="#" class="p-2 rounded-full bg-sand-800 hover:bg-sand-600 hover:text-white transition-colors"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+                    <a href="#" class="p-2 rounded-full bg-sand-800 hover:bg-sand-600 hover:text-white transition-colors"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+                </div>
+            </div>
+
+            <!-- Columna Links Rápidos -->
+            <div>
+                <h4 class="font-bold text-white text-sm uppercase tracking-widest mb-4">Secciones</h4>
+                <ul class="space-y-2.5 text-xs text-sand-300">
+                    <li><a href="#catalogo" @click="activeCategory = 'todos'" class="hover:text-sand-100 transition-colors">Todo el Catálogo</a></li>
+                    <li><a href="#catalogo" @click="activeCategory = 'bebes'" class="hover:text-sand-100 transition-colors">Ropa de Bebé</a></li>
+                    <li><a href="#catalogo" @click="activeCategory = 'ninos'" class="hover:text-sand-100 transition-colors">Ropa de Niños</a></li>
+                    <li><a href="#probador" class="hover:text-sand-100 transition-colors">Probador de Conjuntos</a></li>
+                    <li><a href="#talles" class="hover:text-sand-100 transition-colors">Buscador de Talles</a></li>
+                </ul>
+            </div>
+
+            <!-- Columna Preguntas / Soporte -->
+            <div>
+                <h4 class="font-bold text-white text-sm uppercase tracking-widest mb-4">Soporte</h4>
+                <ul class="space-y-2.5 text-xs text-sand-300">
+                    <li><a href="#" class="hover:text-sand-100 transition-colors">Preguntas Frecuentes</a></li>
+                    <li><a href="#" class="hover:text-sand-100 transition-colors">Políticas de Cambios</a></li>
+                    <li><a href="#" class="hover:text-sand-100 transition-colors">Costos de Envío DAC / Mirtrans</a></li>
+                    <li><a href="#" class="hover:text-sand-100 transition-colors">Términos de Servicio</a></li>
+                </ul>
+            </div>
+
+            <!-- Columna Newsletter -->
+            <div class="space-y-4">
+                <h4 class="font-bold text-white text-sm uppercase tracking-widest mb-4">Club Nubecita ☁️</h4>
+                <p class="text-xs text-sand-300">Suscríbete para recibir un 10% de descuento en tu primera compra y enterarte de lanzamientos sostenibles.</p>
+                <div class="flex">
+                    <input type="email" placeholder="Tu Email" class="w-full bg-sand-800 text-xs text-white px-3 py-2.5 rounded-l-xl focus:outline-none focus:ring-1 focus:ring-sand-400 border border-sand-750">
+                    <button @click="showToast('Suscripción Exitosa', '¡Gracias por sumarte a nuestro newsletter!')" class="bg-sand-600 hover:bg-sand-700 text-white font-bold text-xs px-4 rounded-r-xl transition-colors">Unirme</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Derechos y Legales -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 border-t border-sand-800 text-center text-[10px] text-sand-400 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <span>&copy; 2026 Nubecita Kids. Todos los derechos reservados. Diseñado con amor en algodón de lino orgánico en Uruguay.</span>
+            <div class="flex space-x-4">
+                <a href="#" class="hover:text-sand-100">Política de Privacidad</a>
+                <span>&bull;</span>
+                <a href="#" class="hover:text-sand-100">Términos Legales</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function nubecitaApp() {
+            return {
+                // Estado del menú móvil
+                mobileMenuOpen: false,
+
+                // Búsqueda y Filtros
+                searchQuery: '',
+                activeCategory: 'todos',
+
+                // Base de datos de Productos de Nubecita Kids Boho/Beige con valores reales en Pesos Uruguayos ($U)
+                products: [
+                    {
+                        id: 1,
+                        name: "Enterito Oso Algodón",
+                        description: "Tejido artesanalmente con algodón orgánico hipoalergénico. Ideal para proteger su tierna piel con máxima calidez.",
+                        category: "bebes",
+                        price: 990,
+                        oldPrice: 1500,
+                        rating: 4.9,
+                        isNew: true,
+                        sizes: ["RN", "0-3m", "3-6m", "6-9m"],
+                        image: "https://images.unsplash.com/photo-1620761135702-5b0d21200016?auto=format&fit=crop&w=600&q=80"
+                    },
+                    {
+                        id: 2,
+                        name: "Abrigo Cozy Teddy",
+                        description: "Manta de abrigo ultra acolchada y térmica, confeccionada en algodón tejido de tacto nube súper suave. Ideal para cunas y paseos cozy.",
+                        category: "ninos",
+                        price: 890,
+                        oldPrice: 1200,
+                        rating: 4.8,
+                        isNew: true,
+                        sizes: ["Talle Único"],
+                        image: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=600&q=80"
+                    },
+                    {
+                        id: 3,
+                        name: "Vestido Lino Soft Cream",
+                        description: "Confección liviana y fresca. Mangas con volados tiernos de estilo rústico y botones de madera orgánica.",
+                        category: "ninos",
+                        price: 1090,
+                        oldPrice: 1490,
+                        rating: 4.7,
+                        isNew: false,
+                        sizes: ["2a", "4a", "6a"],
+                        image: "https://images.unsplash.com/photo-1595959183075-c1d0a161b99d?auto=format&fit=crop&w=600&q=80"
+                    },
+                    {
+                        id: 4,
+                        name: "Gorro Oso Tejido Croché",
+                        description: "Gorro súper tierno con orejitas tejidas a mano. Cubre perfectamente del viento frío conservando el estilo natural.",
+                        category: "accesorios",
+                        price: 590,
+                        oldPrice: 790,
+                        rating: 5.0,
+                        isNew: false,
+                        sizes: ["Talle Único Bebé", "Talle Único Niño"],
+                        image: "https://images.unsplash.com/photo-1501686696251-2a54c3440536?auto=format&fit=crop&w=600&q=80"
+                    },
+                    {
+                        id: 5,
+                        name: "Pijama Algodón Alabastro",
+                        description: "Dos piezas en interlock de puro algodón peinado para garantizar un sueño calmo, fresco y reparador en nubes.",
+                        category: "ninos",
+                        price: 1090,
+                        oldPrice: 1490,
+                        rating: 4.9,
+                        isNew: false,
+                        sizes: ["2a", "3a", "4a", "5a", "6a"],
+                        image: "https://images.unsplash.com/photo-1555252333-9f8e92e65df9?auto=format&fit=crop&w=600&q=80"
+                    },
+                    {
+                        id: 6,
+                        name: "Manta Recibidora Hilo",
+                        description: "Súper suave, liviana y abrigada. Doble capa de algodón con textura de punto boho en relieve. Ideal para regalar.",
+                        category: "accesorios",
+                        price: 1420,
+                        oldPrice: null,
+                        rating: 5.0,
+                        isNew: true,
+                        sizes: ["Universal"],
+                        image: "https://images.unsplash.com/photo-1442458370899-ae20e367c5d8?auto=format&fit=crop&w=600&q=80"
+                    },
+                    {
+                        id: 7,
+                        name: "Jardinerito Velvet Toffee",
+                        description: "De corderoy suave elastizado color caramelo con tiras regulables. Combina perfecto con remeras o saquitos.",
+                        category: "bebes",
+                        price: 1390,
+                        oldPrice: 1700,
+                        rating: 4.6,
+                        isNew: false,
+                        sizes: ["6-12m", "12-18m", "18-24m"],
+                        image: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=600&q=80"
+                    }
+                ],
+
+                // Datos exclusivos para el Armador de Conjuntos (Outfit Builder) en $U - Actualizados
+                outfitTops: [
+                    { id: 101, name: "Suéter Nube Linen", price: 690, emoji: "👕" },
+                    { id: 102, name: "Saco Oso Latte", price: 990, emoji: "🧥" },
+                    { id: 103, name: "Camiseta Trigo", price: 990, emoji: "👚" }
+                ],
+                outfitBottoms: [
+                    { id: 201, name: "Pantalón Avena", price: 1290, emoji: "👖" },
+                    { id: 202, name: "Ranita Velvet Cafe", price: 790, emoji: "🩳" },
+                    { id: 203, name: "Ranita Soft Crema", price: 299, emoji: "🧦" }
+                ],
+                outfitAccessories: [
+                    { id: 301, name: "Gorro Oso Lana", price: 690, emoji: "🐻" },
+                    { id: 302, name: "Manta Plush Tierra", price: 990, emoji: "🍼" },
+                    { id: 303, name: "Lentes Sol Madera", price: 790, emoji: "🕶️" }
+                ],
+
+                // Selección actual en el Probador de Conjuntos
+                selectedOutfitTop: null,
+                selectedOutfitBottom: null,
+                selectedOutfitAccessory: null,
+
+                // Estado del Buscador de Talles (Size Finder)
+                finderAge: '6-12',
+                finderHeight: 74,
+                finderWeight: 9.5,
+
+                // Carrito de compras
+                cart: [],
+                cartOpen: false,
+                cartCount: 0,
+                cartTotal: 0,
+
+                // Modal de Vista Rápida
+                quickViewOpen: false,
+                quickProduct: {},
+                selectedSize: '',
+
+                // Checkout Simulado
+                checkoutOpen: false,
+
+                // Sistema de Alertas Toast
+                toasts: [],
+
+                // Inicializador
+                init() {
+                    // Seleccionar prendas por defecto en el outfit builder
+                    this.selectedOutfitTop = this.outfitTops[0];
+                    this.selectedOutfitBottom = this.outfitBottoms[0];
+                    this.selectedOutfitAccessory = this.outfitAccessories[0];
+
+                    // Inicializar iconos de Lucide
+                    setTimeout(() => {
+                        lucide.createIcons();
+                    }, 100);
+                },
+
+                filteredProducts() {
+                    return this.products.filter(p => {
+                        const matchesCategory = this.activeCategory === 'todos' || p.category === this.activeCategory;
+                        const matchesSearch = p.name.toLowerCase().includes(this.searchQuery.toLowerCase()) || 
+                                              p.description.toLowerCase().includes(this.searchQuery.toLowerCase());
+                        return matchesCategory && matchesSearch;
+                    });
+                },
+
+                // Agregar producto directo desde el catálogo
+                addToCart(product) {
+                    const defaultSize = product.sizes[0];
+                    this.addItemToCartStore(product, defaultSize);
+                },
+
+                addItemToCartStore(product, size) {
+                    const existingItem = this.cart.find(item => item.id === product.id && item.selectedSize === size);
+                    
+                    if (existingItem) {
+                        existingItem.quantity++;
+                    } else {
+                        this.cart.push({
+                            id: product.id,
+                            name: product.name,
+                            price: product.price,
+                            image: product.image,
+                            selectedSize: size,
+                            quantity: 1
+                        });
+                    }
+                    this.updateCartTotals();
+                    this.showToast("Bolsa Actualizada", `${product.name} (Talle ${size}) fue agregado.`);
+                },
+
+                increaseQty(item) {
+                    item.quantity++;
+                    this.updateCartTotals();
+                },
+                decreaseQty(item) {
+                    if (item.quantity > 1) {
+                        item.quantity--;
+                    } else {
+                        this.removeFromCart(item);
+                    }
+                    this.updateCartTotals();
+                },
+                removeFromCart(item) {
+                    this.cart = this.cart.filter(c => !(c.id === item.id && c.selectedSize === item.selectedSize));
+                    this.updateCartTotals();
+                    this.showToast("Prenda Removida", `${item.name} se quitó de la bolsa.`);
+                },
+                updateCartTotals() {
+                    this.cartCount = this.cart.reduce((sum, item) => sum + item.quantity, 0);
+                    this.cartTotal = this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                },
+
+                addOutfitToCart() {
+                    let addedNames = [];
+                    
+                    if (this.selectedOutfitTop) {
+                        this.addItemToCartStore({
+                            id: this.selectedOutfitTop.id,
+                            name: this.selectedOutfitTop.name,
+                            price: this.selectedOutfitTop.price,
+                            image: "https://placehold.co/100x100/FAF8F5/8e775b?text=" + encodeURIComponent(this.selectedOutfitTop.name)
+                        }, "Único");
+                        addedNames.push(this.selectedOutfitTop.name);
+                    }
+                    if (this.selectedOutfitBottom) {
+                        this.addItemToCartStore({
+                            id: this.selectedOutfitBottom.id,
+                            name: this.selectedOutfitBottom.name,
+                            price: this.selectedOutfitBottom.price,
+                            image: "https://placehold.co/100x100/F4EFE6/8e775b?text=" + encodeURIComponent(this.selectedOutfitBottom.name)
+                        }, "Único");
+                        addedNames.push(this.selectedOutfitBottom.name);
+                    }
+                    if (this.selectedOutfitAccessory) {
+                        this.addItemToCartStore({
+                            id: this.selectedOutfitAccessory.id,
+                            name: this.selectedOutfitAccessory.name,
+                            price: this.selectedOutfitAccessory.price,
+                            image: "https://placehold.co/100x100/FAF8F5/8e775b?text=" + encodeURIComponent(this.selectedOutfitAccessory.name)
+                        }, "Único");
+                        addedNames.push(this.selectedOutfitAccessory.name);
+                    }
+
+                    this.showToast("Conjunto Listo ☁️", "Todo el conjunto se agregó exitosamente.");
+                    this.cartOpen = true;
+                },
+
+                calculateSize() {
+                    const height = parseInt(this.finderHeight);
+                    const weight = parseFloat(this.finderWeight);
+
+                    if (height <= 55 && weight <= 4.5) {
+                        return "Talle RN (Recién Nacido)";
+                    } else if (height <= 62 && weight <= 6.5) {
+                        return "Talle 1 (3-6 meses)";
+                    } else if (height <= 72 && weight <= 9) {
+                        return "Talle 2 (6-12 meses)";
+                    } else if (height <= 82 && weight <= 12) {
+                        return "Talle 3 (12-18 meses)";
+                    } else if (height <= 92 && weight <= 15) {
+                        return "Talle 4 (18-24 meses)";
+                    } else if (height <= 104 && weight <= 18) {
+                        return "Talle 4 (2-4 años)";
+                    } else {
+                        return "Talle 6 (4-6 años)";
+                    }
+                },
+
+                openQuickView(product) {
+                    this.quickProduct = product;
+                    this.selectedSize = product.sizes[0];
+                    this.quickViewOpen = true;
+                },
+                addQuickToCart() {
+                    this.addItemToCartStore(this.quickProduct, this.selectedSize);
+                    this.quickViewOpen = false;
+                },
+
+                showSimulatedCheckout() {
+                    this.cartOpen = false;
+                    this.checkoutOpen = true;
+                },
+                completeSimulatedCheckout() {
+                    this.checkoutOpen = false;
+                    this.cart = [];
+                    this.updateCartTotals();
+                    this.showToast("¡Pedido Recibido! 🎉", "Felicidades, tu pedido ficticio se registró en las nubes de Nubecita Uruguay.");
+                },
+
+                showToast(title, message) {
+                    const id = Date.now();
+                    this.toasts.push({ id, title, message });
+                    
+                    setTimeout(() => lucide.createIcons(), 50);
+
+                    setTimeout(() => {
+                        this.toasts = this.toasts.filter(t => t.id !== id);
+                    }, 3500);
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>
